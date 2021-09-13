@@ -115,7 +115,6 @@ class Camera(threading.Thread):
             self.m_rFood[labels[label_id]]=label_id
             #self.m_rFood.append(labels[label_id])
             print ( labels[label_id] )
-            print ("Add to foods list ", labels[label_id]) 
             self.m_bPressed = False
             camera.annotate_text = '%s added.' % (labels[label_id] )
 
@@ -140,11 +139,11 @@ def main():
     cam.start()
   
     window = Tk()
-    window.geometry('250x250')
-    window.title('pi camera')
+    window.geometry('250x250+750+300')
+    window.title('AI CHEF')
 
     l = Label(window, bg="white", text='Capturing the Image', font=13)
-    l.place(x=25, y=10)
+    l.place(x=30, y=10)
   
     b1 = Button(window, width=10, height=2, text='CAPTURE', bg="magenta", command=pressed_button)
     b1.place(x=65, y=60)
