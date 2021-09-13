@@ -1,0 +1,8 @@
+noodle
+egg
+rice
+mushroom
+onion
+tomatosauce
+ham
+cheese
