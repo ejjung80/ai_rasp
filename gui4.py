@@ -19,7 +19,7 @@ from tkinter import messagebox
 
 from PIL import Image, ImageTk ###import 추가->mj
 from tflite_runtime.interpreter import Interpreter
-import tflite ###import 추가->mj
+#import tflite ###import 추가->mj
 import pandas as pd
 
 class Camera(threading.Thread):
@@ -130,33 +130,33 @@ def pressed_recipe(text):
 def show_recipe():
     source = cam.result()
     data= pd.read_csv('food_Ingredients.csv')
-    print(data)
+    #print(data)
 
     recipe_ingredient=data['food ingredients']
     ingredients=[]
     count=[0 for _ in range(len(data))]
-    print("data 갯수 %d" %len(data))
+    #print("data 갯수 %d" %len(data))
     recommend=[]
     for num,i in enumerate(recipe_ingredient):
         ingredients.append(i.split(','))
     for num,a in enumerate(ingredients):
-        print(a)
+        #print(a)
         for s in source:
             if s in a:
                 count[num]+=1 # 나중에 딕셔너리형으로 바꾸는거 고려
-    print(max(count))
+    #print(max(count))
     for num,cnt in enumerate(count):
         if max(count)==0:
             print("해당재료로 만들 수 있는 레시피 없음.")
         if cnt==max(count) :
             recommend.append(data['cook'][num])
-    print(recommend)
+    #print(recommend)
     
     recipe = Tk()
     recipe.configure(bg='white')
     recipe.geometry('750x600+100+100')
-    recipe.title(recommend[0])
-    l = Label(recipe, bg="white", text='레시피 추천', font=13) #요리제목
+    recipe.title('레시피 추천')
+    l = Label(recipe, bg="white", text=recommend[0], font=13) #요리제목
     l.place(x=30, y=10)
     
     image1 = Image.open("image/1_%s_2.jpg"%recommend[0])
