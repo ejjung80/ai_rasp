@@ -19,7 +19,7 @@ from tkinter import messagebox
 
 from PIL import Image, ImageTk ###import 추가->mj
 from tflite_runtime.interpreter import Interpreter
-#import tflite ###import 추가->mj
+import tflite ###import 추가->mj
 import pandas as pd
 
 class Camera(threading.Thread):
@@ -128,59 +128,75 @@ def pressed_recipe(text):
     print(text)
 
 def show_recipe():
-    source = cam.result()
-    data= pd.read_csv('food_Ingredients.csv')
-    #print(data)
-
-    recipe_ingredient=data['food ingredients']
-    ingredients=[]
-    count=[0 for _ in range(len(data))]
-    #print("data 갯수 %d" %len(data))
-    recommend=[]
-    for num,i in enumerate(recipe_ingredient):
-        ingredients.append(i.split(','))
-    for num,a in enumerate(ingredients):
-        #print(a)
-        for s in source:
-            if s in a:
-                count[num]+=1 # 나중에 딕셔너리형으로 바꾸는거 고려
+    try:
+      source = cam.result()
+      data= pd.read_csv('food_Ingredients.csv')
+      #print(data)
+    
+      recipe_ingredient=data['food ingredients']
+      ingredients=[]
+      count=[0 for _ in range(len(data))]
+      #print("data 갯수 %d" %len(data))
+      recommend=[]
+      for num,i in enumerate(recipe_ingredient):
+          ingredients.append(i.split(','))
+      for num,a in enumerate(ingredients):
+          #print(a)
+          for s in source:
+              if s in a:
+                  count[num]+=1 # 나중에 딕셔너리형으로 바꾸는거 고려
+          if any(count):
+              for num in range(len(count)):
+                if count[num]!=0:
+                  count[num] = count[num]/len(ingredients[num])
+              result=count.index(max(count))
+              recommend.append(data['cook'][result])    
+          else: 
+              print("해당재료로 만들 수 있는 레시피 없음.")
+              msg2 = messagebox.showinfo('no recommend','No recipe for the ingredients')
+              raise ValueError('No recipe for the ingredients!')
+              break 
     #print(max(count))
-    for num,cnt in enumerate(count):
-        if max(count)==0:
-            print("해당재료로 만들 수 있는 레시피 없음.")
-        if cnt==max(count) :
-            recommend.append(data['cook'][num])
-    #print(recommend)
+    # for num,cnt in enumerate(count):
+    #     if max(count)==0:
+    #         print("해당재료로 만들 수 있는 레시피 없음.")
+    #         msg2 = messagebox.showinfo('no recommend','No recipe for the ingredients')
+    #         break
+    #     if cnt==max(count) :
+    #         recommend.append(data['cook'][num])
+    # #print(recommend)
     
-    recipe = Tk()
-    recipe.configure(bg='white')
-    recipe.geometry('750x600+100+100')
-    recipe.title('레시피 추천')
-    l = Label(recipe, bg="white", text=recommend[0], font=13) #요리제목
-    l.place(x=30, y=10)
+      recipe = Tk()
+      recipe.configure(bg='white')
+      recipe.geometry('750x600+100+100')
+      recipe.title('레시피 추천')
+      l = Label(recipe, bg="white", text=recommend[0], font=13) #요리제목
+      l.place(x=30, y=10)
     
-    image1 = Image.open("image/1_%s_2.jpg"%recommend[0])
-    image2 = Image.open("image/1_%s_3.jpg"%recommend[0])
+      image1 = Image.open("image/%s_2.jpg"%recommend[0])
+      image2 = Image.open("image/%s_3.jpg"%recommend[0])
 
-    image1 = image1.resize((350,500),Image.ANTIALIAS)
-    image2 = image2.resize((350,500),Image.ANTIALIAS)
+      image1 = image1.resize((350,500),Image.ANTIALIAS)
+      image2 = image2.resize((350,500),Image.ANTIALIAS)
 
-    img1 = ImageTk.PhotoImage(image1,master=recipe)  
-    img2 = ImageTk.PhotoImage(image2,master=recipe)
+      img1 = ImageTk.PhotoImage(image1,master=recipe)  
+      img2 = ImageTk.PhotoImage(image2,master=recipe)
 
-    label1 = Label(recipe, image= img1)
-    label2 = Label(recipe, image= img2)
+      label1 = Label(recipe, image= img1)
+      label2 = Label(recipe, image= img2)
     
-    # # Position image
-    label1.place(x=20, y=60)
-    label2.place(x=370,y=60)
+      # # Position image
+      label1.place(x=20, y=60)
+      label2.place(x=370,y=60)
 
-    btn={}
-    for num,a in enumerate(recommend):
-          btn[a] = Button(recipe, width=20, height=1, text=a, bg="yellow", command=lambda: pressed_recipe(a))
-          btn[a].place(x=130+150*num, y=10)
-    print(btn)
-    recipe.mainloop()
+    # btn={}
+    # for num,a in enumerate(recommend):
+    #       btn[a] = Button(recipe, width=20, height=1, text=a, bg="yellow", command=lambda: pressed_recipe(a))
+    #       btn[a].place(x=130+150*num, y=10)
+    #print(btn)
+      recipe.mainloop()
+    finally:
+      print("end")  
 
     return recommend
 
