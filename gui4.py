@@ -19,7 +19,7 @@ from tkinter import messagebox
 
 from PIL import Image, ImageTk ###import 추가->mj
 from tflite_runtime.interpreter import Interpreter
-import tflite ###import 추가->mj
+#import tflite ###import 추가->mj
 import pandas as pd
 
 class Camera(threading.Thread):
@@ -83,7 +83,7 @@ class Camera(threading.Thread):
     _, height, width, _ = interpreter.get_input_details()[0]['shape']
 
     with picamera.PiCamera(resolution=(640, 480), framerate=3) as camera:
-      camera.start_preview(fullscreen=False, window=(100,100,640,480) )
+      camera.start_preview(fullscreen=False, window=(0,0,320,240) )
       try:
         stream = io.BytesIO()
         for _ in camera.capture_continuous(
@@ -110,6 +110,7 @@ class Camera(threading.Thread):
             camera.annotate_text = '%s added.' % (labels[label_id] )
 
           if self.m_bExit:
+            camera.stop_preview()
             break
               
       finally:
@@ -130,8 +131,9 @@ def pressed_recipe(text):
 def show_recipe():
     try:
       source = cam.result()
+      cam.exit()
       data= pd.read_csv('food_Ingredients.csv')
-      #print(data)
+      print(data)
     
       recipe_ingredient=data['food ingredients']
       ingredients=[]
@@ -168,7 +170,7 @@ def show_recipe():
     
       recipe = Tk()
       recipe.configure(bg='white')
-      recipe.geometry('750x600+100+100')
+      recipe.geometry('750x600+500+500')
       recipe.title('레시피 추천')
       l = Label(recipe, bg="white", text=recommend[0], font=13) #요리제목
       l.place(x=30, y=10)
@@ -205,7 +207,7 @@ def main():
     try:
         cam.start()
         window = Tk()
-        window.geometry('250x250+750+300')
+        window.geometry('250x250+650+300')
         window.title('AI CHEF')
 
         l = Label(window, bg="white", text='Capturing the Image', font=13)
