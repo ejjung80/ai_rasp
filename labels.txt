@@ -1,7 +1,6 @@
-0 egg
-1 potato
-2 tomatosauce
-3 cheese
-4 onion
-5 garlic
-6 milk
+egg
+tomatosauce
+noodle
+garlic
+tomato
+onion
