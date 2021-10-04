@@ -1,4 +1,4 @@
-###############################
+#############################
 # 현재 1개의 레시피 추천까지 진행
 ##############################
 """Example using TF Lite to classify objects with the Raspberry Pi camera."""
@@ -131,7 +131,6 @@ def pressed_recipe(text):
 def show_recipe():
     try:
       source = cam.result()
-      cam.exit()
       data= pd.read_csv('food_Ingredients.csv')
       print(data)
     
@@ -198,6 +197,10 @@ def show_recipe():
     #print(btn)
       recipe.mainloop()
     finally:
+      recommend.clear()
+      cam.m_rFood.clear()
+      ingredients.clear()
+      count.clear()
       print("end")  
 
     return recommend
