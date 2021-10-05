@@ -1,5 +1,6 @@
-egg
-tomatosauce
-onion
-garlic
-noodle
+0 egg
+1 garlic
+2 tomato
+3 onion
+4 tomatosauce
+5 noodle
