@@ -132,7 +132,7 @@ def show_recipe():
     try:
       source = cam.result()
       data= pd.read_csv('food_Ingredients.csv')
-      print(data)
+      #print(data)
     
       recipe_ingredient=data['food ingredients']
       ingredients=[]
@@ -142,21 +142,21 @@ def show_recipe():
       for num,i in enumerate(recipe_ingredient):
           ingredients.append(i.split(','))
       for num,a in enumerate(ingredients):
-          #print(a)
+          print(a)
           for s in source:
               if s in a:
                   count[num]+=1 # 나중에 딕셔너리형으로 바꾸는거 고려
-          if any(count):
-              for num in range(len(count)):
-                if count[num]!=0:
+      if any(count):
+          for num in range(len(count)):
+              if count[num]!=0:
                   count[num] = count[num]/len(ingredients[num])
-              result=count.index(max(count))
-              recommend.append(data['cook'][result])    
-          else: 
-              print("해당재료로 만들 수 있는 레시피 없음.")
-              msg2 = messagebox.showinfo('no recommend','No recipe for the ingredients')
-              raise ValueError('No recipe for the ingredients!')
-              break 
+          result=count.index(max(count))
+          recommend.append(data['cook'][result])    
+      else: 
+          print("해당재료로 만들 수 있는 레시피 없음.")
+          msg2 = messagebox.showinfo('no recommend','No recipe for the ingredients')
+          raise ValueError('No recipe for the ingredients!')
+           
     #print(max(count))
     # for num,cnt in enumerate(count):
     #     if max(count)==0:
@@ -195,6 +195,10 @@ def show_recipe():
     #       btn[a] = Button(recipe, width=20, height=1, text=a, bg="yellow", command=lambda: pressed_recipe(a))
     #       btn[a].place(x=130+150*num, y=10)
     #print(btn)
+      recommend.clear()
+      cam.m_rFood.clear()
+      ingredients.clear()
+      count.clear()
       recipe.mainloop()
     finally:
       recommend.clear()
